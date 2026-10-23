@@ -1,0 +1,6 @@
+create table if not exists users(id serial primary key,name text,email text unique not null,password text not null,role text not null default 'cliente');
+create table if not exists products(id serial primary key,name text not null,description text default '',category text default '',price numeric not null default 0,cost numeric default 0,stock int default 0 check(stock>=0),image text,source_url text default '',eval_status text default 'pendiente',active boolean default true,created_at timestamptz default now());
+create table if not exists orders(id serial primary key,user_id int references users(id),customer text,phone text,city text,address text,notes text,total numeric default 0,status text default 'pendiente',created_at timestamptz default now());
+create table if not exists order_items(id serial primary key,order_id int references orders(id) on delete cascade,product_id int references products(id) on delete set null,name text,price numeric,cost numeric,qty int);
+-- Bloquea el acceso público vía API de Supabase: solo el backend (conexión directa) puede leer/escribir
+alter table users enable row level security;alter table products enable row level security;alter table orders enable row level security;alter table order_items enable row level security;
