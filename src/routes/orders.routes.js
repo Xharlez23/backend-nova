@@ -20,7 +20,7 @@ customer.post('/', wrap(async (req, res) => {
     let total = 0;
     for (const it of items) {
       const qty = parseInt(it.qty);
-      const [p] = await q('select * from products where id=$1 and active for update', [it.productId]);
+      const [p] = await q("select * from products where id=$1 and active and eval_status='aprobado' for update", [it.productId]);
       if (!p || !(qty > 0) || p.stock < qty) throw bad('Stock insuficiente: ' + (p ? p.name : 'producto'));
       await q('update products set stock=stock-$1 where id=$2', [qty, p.id]);
       await q('insert into order_items(order_id,product_id,name,price,cost,qty) values($1,$2,$3,$4,$5,$6)', [o.id, p.id, p.name, p.price, p.cost, qty]);

@@ -3,7 +3,8 @@ const { requireAuth, requireAdmin } = require('./middleware/auth'), { notFound, 
 const products = require('./routes/products.routes'), orders = require('./routes/orders.routes');
 
 const app = express();
-app.use(cors({ origin: cfg.frontendUrl }), express.json({ limit: '6mb' }));
+const origins = cfg.frontendUrl.split(',').map(s => s.trim().replace(/\/+$/, ''));
+app.use(cors({ origin: origins }), express.json({ limit: '6mb' }));
 
 // Público / cliente
 app.use('/api/auth', require('./routes/auth.routes'));

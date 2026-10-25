@@ -13,7 +13,7 @@ const fields = b => {
 // Público: sin costo ni datos internos
 const catalog = Router();
 catalog.get('/', wrap(async (req, res) =>
-  res.json(await query('select id,name,description,category,price,stock,image from products where active order by id desc'))));
+  res.json(await query("select id,name,description,category,price,stock,image from products where active and eval_status='aprobado' order by id desc"))));
 
 // Admin (ya protegido en app.js)
 const manage = Router();
