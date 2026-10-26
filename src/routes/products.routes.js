@@ -14,7 +14,11 @@ const fields = b => {
 const catalog = Router();
 catalog.get('/', wrap(async (req, res) =>
   res.json(await query("select id,name,description,category,price,stock,image from products where active and eval_status='aprobado' order by id desc"))));
-
+catalog.get('/:id(\\d+)', wrap(async (req, res) => {
+  const [p] = await query("select id,name,description,category,price,stock,image from products where id=$1 and active and eval_status='aprobado'", [req.params.id]);
+  if (!p) throw bad('Producto no disponible', 404);
+  res.json(p);
+}));
 // Admin (ya protegido en app.js)
 const manage = Router();
 manage.get('/', wrap(async (req, res) => res.json(await query(`
