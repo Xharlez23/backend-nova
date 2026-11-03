@@ -15,6 +15,7 @@ app.use('/api/orders', orders.customer);
 app.use('/api/admin', requireAuth, requireAdmin);
 app.use('/api/admin/products', products.manage);
 app.use('/api/admin/orders', orders.manage);
+app.use('/api/admin/finance', require('./routes/finance.routes'));
 app.use('/api/admin', require('./routes/reports.routes'));
 
 app.use(notFound, handler);
